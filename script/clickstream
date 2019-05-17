@@ -1,0 +1,7 @@
+-- Getting a count of a browser (mozilla)
+streamed_data = LOAD '/user/dante/clickdata.csv' USING PigStorage(',') AS (id:chararray, datetime:chararray, siteid:chararray, offerid:chararray, category:chararray, merchant:chararray, countrycode:chararray, browserid:chararray, devid:chararray);
+
+mozilla_user = FILTER streamed_data by browserid matches 'Mozilla';
+grouped = GROUP mozilla_user ALL;
+mozilla_count = FOREACH grouped GENERATE COUNT(mozilla_user);
+DUMP mozilla_count;
