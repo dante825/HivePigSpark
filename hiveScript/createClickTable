@@ -1,1 +1,3 @@
 create table clickstream(id string, datetime string, siteid string, offerid string, category string, merchant string, countrycode string, browserid string, devid string) row format delimited fields terminated by ',';
+
+LOAD DATA LOCAL INPATH '/home/dante/Downloads/clickdata.csv' OVERWRITE INTO TABLE clickstream;
