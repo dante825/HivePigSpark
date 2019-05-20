@@ -1,0 +1,13 @@
+from pyspark.sql.functions import when
+
+df = spark.read.format('csv').option('header', 'true').load('hdfs:///user/dante/clickdata_header.csv')
+df2 = df.withColumn('browserid', when(df['browserid'] == 'Firefox', 'Mozilla Firefox').otherwise(df['browserid']))
+df2 = df2.withColumn('browserid', when(df2['browserid'] == 'Mozilla', 'Mozilla Firefox').otherwise(df2['browserid']))
+df2 = df2.withColumn('browserid', when(df2['browserid'] == 'InternetExplorer', 'Internet Explorer').otherwise(df2['browserid']))
+df2 = df2.withColumn('browserid', when(df2['browserid'] == 'IE', 'Internet Explorer').otherwise(df2['browserid']))
+df2 = df2.withColumn('browserid', when(df2['browserid'] == 'Chrome', 'Google Chrome').otherwise(df2['browserid']))
+
+browserGroup = df2.groupBy('browserid').count()
+browserGroup.orderBy('count', ascending=False).show()
+
+df2.write.csv('hdfs:///user/dante/spark-cleansed')

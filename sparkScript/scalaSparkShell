@@ -1,0 +1,11 @@
+import org.apache.spark.sql.functions._
+val df = spark.read.format("csv").option("header", "true").load("hdfs:///user/dante/clickdata_header.csv")
+val df2 = df.withColumn("browserid", when(col("browserid") === "Firefox", "Mozilla Firefox").otherwise(col("browserid")))
+val df3 = df2.withColumn("browserid", when(col("browserid") === "Mozilla", "Mozilla Firefox").otherwise(col("browserid")))
+val df4 = df3.withColumn("browserid", when(col("browserid") === "InternetExplorer", "Internet Explorer").otherwise(col("browserid")))
+val df5 = df4.withColumn("browserid", when(col("browserid") === "IE", "Internet Explorer").otherwise(col("browserid")))
+val df6 = df5.withColumn("browserid", when(col("browserid") === "Chrome", "Google Chrome").otherwise(col("browserid")))
+val browserGroup = df6.groupBy("browserid").count()
+browserGroup.sort(desc("count")).show()
+
+df6.write.csv("hdfs:///user/dante/scala-cleansed")
