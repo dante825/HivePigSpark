@@ -1,5 +1,0 @@
--- Cleansing the clickstream data with Pig
-streamed_data = LOAD '/user/dante/clickdata.csv' USING PigStorage(',') AS (id:chararray, datetime:chararray, siteid:chararray, offerid:chararray, category:chararray, merchant:chararray, countrycode:chararray, browserid:chararray, devid:chararray);
-
-datetime_col = FOREACH streamed_data GENERATE id, ToDate($1, 'dd/MM/yyyy HH:mm');
-DUMP datetime_col;

@@ -1,0 +1,13 @@
+SELECT cleansed.n_browserid, COUNT(*) AS freq FROM (SELECT *, CASE WHEN click.browserid = 'Mozilla' THEN "Mozilla Firefox"
+WHEN click.browserid = 'Firefox' THEN 'Mozilla Firefox'
+WHEN click.browserid = 'Mozilla Firefox' THEN 'Mozilla Firefox'
+WHEN click.browserid = 'InternetExplorer' THEN 'Internet Explorer' 
+WHEN click.browserid = 'IE' THEN 'Internet Explorer'
+WHEN click.browserid = 'Internet Explorer' THEN 'Internet Explorer'
+WHEN click.browserid = 'Chrome' THEN 'Google Chrome'
+WHEN click.browserid = 'Google Chrome' THEN 'Google Chrome'
+WHEN click.browserid = 'Edge' THEN 'Edge'
+WHEN click.browserid = 'Opera' THEN 'Opera'
+WHEN click.browserid = 'Safari' THEN 'Safari'
+ELSE ''
+END AS n_browserid FROM clickstream click) cleansed GROUP BY cleansed.n_browserid ORDER BY freq DESC;

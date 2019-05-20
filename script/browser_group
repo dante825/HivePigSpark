@@ -1,8 +1,0 @@
--- group the data by browser
-
-streamed_data = LOAD '/user/dante/cleansed_clickstream/part-r-00000' USING PigStorage(',') AS (id:chararray, datetime:chararray, siteid:chararray, offerid:chararray, category:chararray, merchant:chararray, countrycode:chararray, browserid:chararray, devid:chararray);
-
-by_browser = GROUP streamed_data by browserid;
-by_browser_count = FOREACH by_browser GENERATE FLATTEN(group) as browserid, COUNT($1);
-sorted_browser_count = ORDER by_browser_count BY $1 DESC;
-DUMP sorted_browser_count;
