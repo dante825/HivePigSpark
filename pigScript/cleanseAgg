@@ -16,14 +16,11 @@ cleansed_chrome = FOREACH cleansed_ie GENERATE id, REPLACE(browserid, '^Chrome$'
 -- Join the columns back together
 join_data = JOIN streamed_data by id, datetime_col by id, cleansed_chrome by id;
 cleansed_data = FOREACH join_data GENERATE $0 AS id, $10 AS datetime, $2 AS siteid, $3 AS offerid, $4 AS category, $5 AS merchant, $6 AS countrycode, $12 AS browserid, $8 AS devid;
-STORE cleansed_data INTO '/user/dante/cleansed_clickstream' USING PigStorage(',');
 
---DUMP cleansed_data;
-/*
+--STORE cleansed_data INTO '/user/dante/cleansed_clickstream' USING PigStorage(',');
+
 -- Aggregating the data in browserid column
-by_browser = GROUP cleansed_chrome BY browserid;
+by_browser = GROUP cleansed_data BY browserid;
 by_browser_count = FOREACH by_browser GENERATE FLATTEN(group) as browserid, COUNT($1);
 sorted_browser_count = ORDER by_browser_count BY $1 DESC;
 DUMP sorted_browser_count;
-
-*/
